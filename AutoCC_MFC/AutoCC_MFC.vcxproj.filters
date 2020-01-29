@@ -54,6 +54,9 @@
     <ClInclude Include="CC.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ABOUT_MFC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AutoCC_MFC.cpp">
@@ -89,6 +92,9 @@
     <ClCompile Include="frame_MFC.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ABOUT_MFC.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AutoCCMFC.rc">
@@ -102,6 +108,15 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\AutoCC_MFC.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\title.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\title.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

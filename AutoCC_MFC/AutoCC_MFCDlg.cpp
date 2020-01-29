@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 #include "config.h"
 #include "main.h"
+#include "ABOUT_MFC.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -73,6 +74,7 @@ void CAutoCCMFCDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT6, m_Edit_SafeB);
 	DDX_Control(pDX, IDC_BUTTON1, m_Button_Start);
 	DDX_Control(pDX, IDC_BUTTON2, m_Button_End);
+	DDX_Control(pDX, IDC_STATIC_TIP, m_Lable_Tip);
 }
 
 BEGIN_MESSAGE_MAP(CAutoCCMFCDlg, CDialog)
@@ -89,8 +91,17 @@ BEGIN_MESSAGE_MAP(CAutoCCMFCDlg, CDialog)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN1, &CAutoCCMFCDlg::OnDeltaposSpin)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN2, &CAutoCCMFCDlg::OnDeltaposSpin)
 	ON_WM_CLOSE()
-	ON_BN_CLICKED(IDC_BUTTON1, &CAutoCCMFCDlg::OnBnClickedButton1)
-	ON_BN_CLICKED(IDC_BUTTON2, &CAutoCCMFCDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON1, &CAutoCCMFCDlg::OnBnClickedButtonStart)
+	ON_BN_CLICKED(IDC_BUTTON2, &CAutoCCMFCDlg::OnBnClickedButtonEnd)
+	ON_EN_SETFOCUS(IDC_EDIT1, &CAutoCCMFCDlg::OnEnSetfocusEdit)
+	ON_EN_SETFOCUS(IDC_EDIT2, &CAutoCCMFCDlg::OnEnSetfocusEdit)
+	ON_WM_HOTKEY()
+	ON_WM_HELPINFO()
+	ON_COMMAND(ID_MENU_START, &CAutoCCMFCDlg::OnMenuStart)
+	ON_COMMAND(ID_MENU_END, &CAutoCCMFCDlg::OnMenuEnd)
+	ON_COMMAND(ID_MENU_EXIT, &CAutoCCMFCDlg::OnMenuExit)
+	ON_COMMAND(ID_32774, &CAutoCCMFCDlg::OnMenuSetInitial)
+	ON_COMMAND(ID_32775, &CAutoCCMFCDlg::OnMenuAbout)
 END_MESSAGE_MAP()
 
 
@@ -127,8 +138,9 @@ BOOL CAutoCCMFCDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 
-	//设置DamageA和DamageB的comboBox
-
+	//添加全局热键Ctrl+F1---开启
+	RegisterHotKey(GetSafeHwnd(), 8, MOD_CONTROL, VK_F1);
+	RegisterHotKey(GetSafeHwnd(), 9, MOD_CONTROL, VK_F2);
 
 	//设置DamageA和DamageB的Spin
 	UDACCEL aclA, aclB;
@@ -142,7 +154,16 @@ BOOL CAutoCCMFCDlg::OnInitDialog()
 	m_Spin_DamageB.SetAccel(2, &aclB);
 	m_Spin_DamageB.SetBuddy(GetDlgItem(IDC_EDIT2));
 
-	//设置DamagaA和DamageB的编辑框
+	//设置编辑框
+	m_Edit_DamageA.SetLimitText(6);
+	m_Edit_DamageB.SetLimitText(6);
+	m_Edit_TrackA.SetLimitText(6);
+	m_Edit_TrackB.SetLimitText(6);
+	m_Edit_SafeA.SetLimitText(6);
+	m_Edit_SafeA.SetLimitText(6);
+
+	//设置提示文本
+	m_Lable_Tip.SetWindowTextW(_T("AutoCC Completed!"));
 
 	//设置按钮
 	m_Button_Start.EnableWindow(false);
@@ -168,35 +189,6 @@ void CAutoCCMFCDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// 如果向对话框添加最小化按钮，则需要下面的代码
-//  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
-//  这将由框架自动完成。
-
-void CAutoCCMFCDlg::OnPaint()
-{
-	if (IsIconic())
-	{
-		CPaintDC dc(this); // 用于绘制的设备上下文
-
-		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
-
-		// 使图标在工作区矩形中居中
-		int cxIcon = GetSystemMetrics(SM_CXICON);
-		int cyIcon = GetSystemMetrics(SM_CYICON);
-		CRect rect;
-		GetClientRect(&rect);
-		int x = (rect.Width() - cxIcon + 1) / 2;
-		int y = (rect.Height() - cyIcon + 1) / 2;
-
-		// 绘制图标
-		dc.DrawIcon(x, y, m_hIcon);
-	}
-	else
-	{
-		CDialog::OnPaint();
-	}
-}
-
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
 HCURSOR CAutoCCMFCDlg::OnQueryDragIcon()
@@ -204,19 +196,22 @@ HCURSOR CAutoCCMFCDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-//重载CDialog的两个虚函数OnOK和OnCancel使其什么也不做
+//重载OnOK使其失效
 void CAutoCCMFCDlg::OnOK()
 {
 	// TODO: 在此添加专用代码和/或调用基类
 
 	//CDialogEx::OnOK();
 }
+
+//重载OnCancel使其失效
 void CAutoCCMFCDlg::OnCancel()
 {
 	// TODO: 在此添加专用代码和/或调用基类
 
 	//CDialogEx::OnCancel();
 }
+
 //重载onclose使点击X按钮时关闭窗口
 void CAutoCCMFCDlg::OnClose()
 {
@@ -225,12 +220,21 @@ void CAutoCCMFCDlg::OnClose()
 	CDialog::OnCancel();
 }
 
+//重载OnHelpInfo函数处理WM_HELPINFO消息使其失效
+BOOL CAutoCCMFCDlg::OnHelpInfo(HELPINFO* pHelpInfo)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	//return CDialog::OnHelpInfo(pHelpInfo);
+	return true;
+}
+
 /**
  * 添加响应事件
  *
  */
 
-//ComboBox
+//设置响应ComboBox
 void CAutoCCMFCDlg::OnCbnSelchangeComboBox()
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -245,7 +249,7 @@ void CAutoCCMFCDlg::OnCbnSelchangeComboBox()
 
 }
 
-//Edit
+//设置响应Edit
 void CAutoCCMFCDlg::OnEnChangeEdit()
 {
 	// TODO:  如果该控件是 RICHEDIT 控件，它将不
@@ -261,21 +265,21 @@ void CAutoCCMFCDlg::OnEnChangeEdit()
 	}
 }
 
-//Spin
+//设置响应Spin
 void CAutoCCMFCDlg::OnDeltaposSpin(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
+
 	//将comboBox置为自定义
 	m_ComboBox.SetCurSel(5);
 	//调用comboBox响应函数
-	configLoad();
-	Config::load();
-	loadDamageEditUI();
+	OnCbnSelchangeComboBox();
 }
 
-void CAutoCCMFCDlg::OnBnClickedButton1()
+//设置响应"启用"按钮
+void CAutoCCMFCDlg::OnBnClickedButtonStart()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
@@ -283,13 +287,13 @@ void CAutoCCMFCDlg::OnBnClickedButton1()
 	m_Button_Start.EnableWindow(false);
 	m_Button_End.EnableWindow(true);
 	//设置提示文本
-
+	m_Lable_Tip.SetWindowTextW(_T("AutoCC Completed!"));
 	//开启主线程
 	main::openMainThread();
 }
 
-
-void CAutoCCMFCDlg::OnBnClickedButton2()
+//设置响应"禁用"按钮
+void CAutoCCMFCDlg::OnBnClickedButtonEnd()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
@@ -297,7 +301,98 @@ void CAutoCCMFCDlg::OnBnClickedButton2()
 	m_Button_End.EnableWindow(false);
 	m_Button_Start.EnableWindow(true);
 	//设置提示文本
-
+	m_Lable_Tip.SetWindowTextW(_T(""));
 	//关闭所有线程
 	main::closeAllThread();
+}
+
+//处理使Edit控件在只读状态下不显示光标
+void CAutoCCMFCDlg::OnEnSetfocusEdit()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	//间接判断Edit控件是否为只读状态
+	bool ifReadOnly = (m_ComboBox.GetCurSel() <= 4);
+	//隐藏Edit光标
+	if (ifReadOnly)
+	{
+		m_Edit_DamageA.HideCaret();
+		m_Edit_DamageB.HideCaret();
+	}
+}
+
+/**
+ * 响应全局热键
+ *
+ */
+
+void CAutoCCMFCDlg::OnHotKey(UINT nHotKeyId, UINT nKey1, UINT nKey2)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	if (nKey2 == VK_F1)
+	{
+		//视为"启用"按钮被点击
+		OnBnClickedButtonStart();
+	}
+	else if(nKey2 == VK_F2)
+	{
+		//视为"禁用"按钮被点击
+		OnBnClickedButtonEnd();
+	}
+
+	CDialog::OnHotKey(nHotKeyId, nKey1, nKey2);
+}
+
+/**
+ * 添加菜单栏处理函数
+ *
+ */
+
+//设置-开启
+void CAutoCCMFCDlg::OnMenuStart()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	//视为"启用"按钮被点击
+	OnBnClickedButtonStart();
+}
+
+//设置-关闭
+void CAutoCCMFCDlg::OnMenuEnd()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	//视为"禁用"按钮被点击
+	OnBnClickedButtonEnd();
+}
+
+//设置-退出
+void CAutoCCMFCDlg::OnMenuExit()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	CDialog::OnCancel();
+}
+
+//帮助-初始化
+void CAutoCCMFCDlg::OnMenuSetInitial()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	//config初始化
+	cc_Config.setInitial();
+	//数据加载
+	Config::load();
+	//加载UI
+	loadAllUI();
+}
+
+
+void CAutoCCMFCDlg::OnMenuAbout()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	ABOUT_MFC about_Frame;
+	about_Frame.DoModal();
 }

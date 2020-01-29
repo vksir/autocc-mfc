@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ABOUT_MFC.h" />
     <ClInclude Include="assistant.h" />
     <ClInclude Include="AutoCC_MFC.h" />
     <ClInclude Include="AutoCC_MFCDlg.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ABOUT_MFC.cpp" />
     <ClCompile Include="assistant.cpp" />
     <ClCompile Include="AutoCC_MFC.cpp" />
     <ClCompile Include="AutoCC_MFCDlg.cpp" />
@@ -223,6 +225,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\AutoCC_MFC.ico" />
+    <Image Include="res\bitmap2.bmp" />
+    <Image Include="res\title.bmp" />
+    <Image Include="res\title.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
