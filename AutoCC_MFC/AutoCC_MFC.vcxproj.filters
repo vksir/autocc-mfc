@@ -113,11 +113,5 @@
     <Image Include="res\title.bmp">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="res\bitmap2.bmp">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="res\title.png">
-      <Filter>资源文件</Filter>
-    </Image>
   </ItemGroup>
 </Project>

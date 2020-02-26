@@ -225,9 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\AutoCC_MFC.ico" />
-    <Image Include="res\bitmap2.bmp" />
     <Image Include="res\title.bmp" />
-    <Image Include="res\title.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

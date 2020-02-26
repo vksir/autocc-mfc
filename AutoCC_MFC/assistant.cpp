@@ -78,85 +78,85 @@ void Assistant::stop()
     }
 }
 
-void Assistant::WSya()
-{
-    while (ifThreadRun) {
-        if (GetKeyState('U') < 0) {
-            ifAssistantRun = true;
-
-            press('W', 86);
-
-            //开始				- _ -- _ -
-            delayHL(809, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('K', 126);
-
-            delayHL(308, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('S', 115);
-
-            delayHL(767, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('K', 143);
-
-            delayHL(281, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('S', 116);
-
-            delayHL(319, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('K', 156);
-
-            //吃风球
-            delayHL(680, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('S', 98);
-
-            //开始第二段		- _ - _ -
-            delayHL(472, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('K', 110);
-
-            delayHL(520, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('S', 124);
-
-            delayHL(392, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('K', 154);
-
-            delayHL(230, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('S', 128);
-
-            delayHL(500, 20);
-            if (!ifAssistantRun)
-                continue;
-            press('K', 100);
-        }
-        delayLow(1);
-    }
-}
+//void Assistant::WSya()
+//{
+//    while (ifThreadRun) {
+//        if (GetKeyState('U') < 0) {
+//            ifAssistantRun = true;
+//
+//            press('W', 86);
+//
+//            //开始				- _ -- _ -
+//            delayHL(809, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('K', 126);
+//
+//            delayHL(308, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('S', 115);
+//
+//            delayHL(767, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('K', 143);
+//
+//            delayHL(281, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('S', 116);
+//
+//            delayHL(319, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('K', 156);
+//
+//            //吃风球
+//            delayHL(680, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('S', 98);
+//
+//            //开始第二段		- _ - _ -
+//            delayHL(472, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('K', 110);
+//
+//            delayHL(520, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('S', 124);
+//
+//            delayHL(392, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('K', 154);
+//
+//            delayHL(230, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('S', 128);
+//
+//            delayHL(500, 20);
+//            if (!ifAssistantRun)
+//                continue;
+//            press('K', 100);
+//        }
+//        delayLow(1);
+//    }
+//}
 
 void Assistant::run()
 {
     ifThreadRun = true;
     std::thread th1(replace);
     std::thread th2(stop);
-    std::thread th3(WSya);
+    /*std::thread th3(WSya);*/
     th1.detach();
     th2.detach();
-    th3.detach();
+    //th3.detach();
     // testDelay();
 }
 
